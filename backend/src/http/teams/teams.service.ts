@@ -41,13 +41,27 @@ export class TeamsService {
 
     await this.teamMembersRepository.save(teamMember);
 
-    return savedTeam;
+    const foundTeam = await this.teamsRepository.findOne({
+      where: { id: savedTeam.id },
+      relations: ['members', 'members.user', 'createdBy'],
+    });
+
+    if (!foundTeam) {
+      throw new NotFoundException('Team not found after creation');
+    }
+
+    return foundTeam;
   }
 
   async findUserTeams(userId: string): Promise<Team[]> {
     const teamMembers = await this.teamMembersRepository.find({
       where: { user: { id: userId } },
-      relations: ['team', 'team.createdBy'],
+      relations: [
+        'team',
+        'team.createdBy',
+        'team.members',
+        'team.members.user',
+      ],
     });
 
     return teamMembers.map((tm) => tm.team);
