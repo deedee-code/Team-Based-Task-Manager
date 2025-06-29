@@ -18,7 +18,7 @@ import { Task } from '../common/entities/task.entity';
         password: config.get('database.password'),
         host: config.get('database.host'),
         port: config.get('database.port'),
-        synchronize: false,
+        synchronize: true,
         entities: [User, Team, TeamMember, Task],
       }),
       inject: [ConfigService],
