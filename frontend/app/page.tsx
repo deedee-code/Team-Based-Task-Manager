@@ -1,18 +1,24 @@
-"use client"
+"use client";
 
-import { useAuth } from "@/contexts/auth-context"
-import { useTeams } from "@/contexts/team-context"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Users, CheckCircle, Clock, Circle, ArrowRight } from "lucide-react"
-import { LoginForm } from "@/components/login-form"
-import { Navigation } from "@/components/navigation"
-import Link from "next/link"
+import { useAuth } from "@/contexts/auth-context";
+import { useTeams } from "@/contexts/team-context";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Users, CheckCircle, Clock, Circle, ArrowRight } from "lucide-react";
+import { LoginForm } from "@/components/login-form";
+import { Navigation } from "@/components/navigation";
+import Link from "next/link";
 
 export default function Dashboard() {
-  const { user, isLoading: authLoading } = useAuth()
-  const { teams, tasks, isLoading: teamsLoading } = useTeams()
+  const { user, isLoading: authLoading } = useAuth();
+  const { teams, tasks, isLoading: teamsLoading } = useTeams();
 
   if (authLoading) {
     return (
@@ -22,16 +28,16 @@ export default function Dashboard() {
           <p>Loading...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!user) {
-    return <LoginForm />
+    return <LoginForm />;
   }
 
-  const todoTasks = tasks.filter((task) => task.status === "To Do")
-  const inProgressTasks = tasks.filter((task) => task.status === "In Progress")
-  const doneTasks = tasks.filter((task) => task.status === "Done")
+  const todoTasks = tasks.filter((task) => task.status === "To Do");
+  const inProgressTasks = tasks.filter((task) => task.status === "In Progress");
+  const doneTasks = tasks.filter((task) => task.status === "Done");
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,7 +46,9 @@ export default function Dashboard() {
       <main className="container mx-auto px-4 py-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back, {user.username}! Here's an overview of your work.</p>
+          <p className="text-muted-foreground">
+            Welcome back, {user.username}! Here's an overview of your work.
+          </p>
         </div>
 
         {teamsLoading ? (
@@ -53,12 +61,16 @@ export default function Dashboard() {
             {/* Stats Cards */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Teams</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  Total Teams
+                </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{teams.length}</div>
-                <p className="text-xs text-muted-foreground">Teams you're part of</p>
+                <p className="text-xs text-muted-foreground">
+                  Teams you're part of
+                </p>
               </CardContent>
             </Card>
 
@@ -75,12 +87,18 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">In Progress</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  In Progress
+                </CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{inProgressTasks.length}</div>
-                <p className="text-xs text-muted-foreground">Tasks in progress</p>
+                <div className="text-2xl font-bold">
+                  {inProgressTasks.length}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Tasks in progress
+                </p>
               </CardContent>
             </Card>
 
@@ -106,7 +124,10 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent className="space-y-4">
               <Link href="/teams">
-                <Button className="w-full justify-between bg-transparent" variant="outline">
+                <Button
+                  className="w-full justify-between bg-transparent"
+                  variant="outline"
+                >
                   <span className="flex items-center gap-2">
                     <Users className="w-4 h-4" />
                     Manage Teams
@@ -115,7 +136,10 @@ export default function Dashboard() {
                 </Button>
               </Link>
               <Link href="/tasks">
-                <Button className="w-full justify-between bg-transparent" variant="outline">
+                <Button
+                  className="w-full justify-between bg-transparent"
+                  variant="outline"
+                >
                   <span className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4" />
                     View All Tasks
@@ -136,19 +160,28 @@ export default function Dashboard() {
                 <div className="text-center py-8 text-muted-foreground">
                   <CheckCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">No recent activity</p>
-                  <p className="text-xs">Create your first task to get started</p>
+                  <p className="text-xs">
+                    Create your first task to get started
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {tasks.slice(0, 3).map((task) => (
-                    <div key={task.id} className="flex items-center gap-3 p-2 rounded-lg border">
+                    <div
+                      key={task.id}
+                      className="flex items-center gap-3 p-2 rounded-lg border"
+                    >
                       <Badge variant="outline" className="text-xs">
                         {task.status}
                       </Badge>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">{task.title}</p>
+                        <p className="text-sm font-medium truncate">
+                          {task.title}
+                        </p>
                         <p className="text-xs text-muted-foreground">
-                          {task.assignee ? `Assigned to ${task.assignee.username}` : "Unassigned"}
+                          {task.assignedToId
+                            ? `Assigned to ${task.assignedToId}`
+                            : "Unassigned"}
                         </p>
                       </div>
                     </div>
@@ -167,5 +200,5 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
-  )
+  );
 }
