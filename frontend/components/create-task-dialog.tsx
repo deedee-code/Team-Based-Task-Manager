@@ -122,7 +122,7 @@ export function CreateTaskDialog({
                 <SelectContent>
                   <SelectItem value="unassigned">Unassigned</SelectItem>
                   {currentTeam?.members?.map((member) => (
-                    <SelectItem key={member.userId} value={member.userId}>
+                    <SelectItem key={member.user.id} value={member.user.id}>
                       {member.user.username} ({member.role})
                     </SelectItem>
                   ))}
