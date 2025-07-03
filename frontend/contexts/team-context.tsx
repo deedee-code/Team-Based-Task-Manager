@@ -13,6 +13,7 @@ import {
   type Team,
   type Task,
   type CreateTaskData,
+  type UpdateTaskData,
 } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
@@ -31,7 +32,7 @@ interface TeamContextType {
     description: string,
     assignedToId?: string
   ) => Promise<void>;
-  updateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
+  updateTask: (taskId: string, updates: UpdateTaskData) => Promise<void>;
   deleteTask: (taskId: string) => Promise<void>;
   refreshTeams: () => Promise<void>;
   refreshTasks: () => Promise<void>;
@@ -167,7 +168,7 @@ export function TeamProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateTask = async (taskId: string, updates: Partial<Task>) => {
+  const updateTask = async (taskId: string, updates: UpdateTaskData) => {
     if (!currentTeam) return;
 
     const response = await apiClient.updateTask(
@@ -196,7 +197,7 @@ export function TeamProvider({ children }: { children: ReactNode }) {
 
     const response = await apiClient.deleteTask(currentTeam.id, taskId);
 
-    if (response.data) {
+    if (!response.error) {
       await refreshTasks();
       toast({
         title: "Success",

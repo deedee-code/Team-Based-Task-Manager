@@ -36,14 +36,13 @@ export default function ProfilePage() {
 
   const myTasks = tasks.filter(
     (task) =>
-      (typeof task.assignedToId === "string" &&
-        task.assignedToId === user.id) ||
+      (typeof task.assignedTo === "string" && task.assignedTo === user.id) ||
       (typeof task.createdBy === "string" && task.createdBy === user.id)
   );
   const completedTasks = myTasks.filter((task) => task.status === "Done");
   const adminTeams = teams.filter((team) =>
     team.members?.some(
-      (member) => member.userId === user.id && member.role === "Admin"
+      (member) => member.user.id === user.id && member.role === "Admin"
     )
   );
 
@@ -242,9 +241,9 @@ export default function ProfilePage() {
                         <div className="flex-1 min-w-0">
                           <h4 className="font-medium truncate">{task.title}</h4>
                           <p className="text-sm text-muted-foreground">
-                            {(typeof task.assignedToId === "object"
-                              ? task.assignedToId?.id
-                              : task.assignedToId) === user.id
+                            {(typeof task.assignedTo === "object"
+                              ? task.assignedTo?.id
+                              : task.assignedTo) === user.id
                               ? "Assigned to you"
                               : "Created by you"}
                           </p>

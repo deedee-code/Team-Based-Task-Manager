@@ -46,13 +46,11 @@ export function CreateTaskDialog({
     if (!title.trim()) return;
 
     setIsLoading(true);
+
+    const assignee = assignedToId === "unassigned" ? undefined : assignedToId;
+
     try {
-      await createTask(
-        teamId,
-        title.trim(),
-        description.trim(),
-        assignedToId || undefined
-      );
+      await createTask(teamId, title.trim(), description.trim(), assignee);
       setTitle("");
       setDescription("");
       setAssignedTo("unassigned");

@@ -50,28 +50,25 @@ export function EditTaskDialog({
       setTitle(task.title);
       setDescription(task.description);
       setStatus(task.status);
-
-      const currentAssignedTo = task.assignedToId?.id || "";
-      setAssignedTo(currentAssignedTo);
+      setAssignedTo(task.assignedTo?.id || "");
     }
   }, [task, open]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || !currentTeam) return;
 
     setIsLoading(true);
     try {
-      // Fixed: Better logic for handling assignment
-      let assignedToId = null;
-
-      if (
-        assignedToId &&
-        assignedToId !== "Unassigned" &&
-        assignedToId !== ""
-      ) {
-        assignedToId = assignedToId;
-      }
+      await updateTask(task.id, {
+        title: title.trim(),
+        description: description.trim(),
+        status,
+        assignedToId:
+          assignedToId === "Unassigned" || assignedToId === ""
+            ? null
+            : assignedToId,
+      });
 
       onOpenChange(false);
     } catch (error) {
@@ -154,7 +151,7 @@ export function EditTaskDialog({
                 <SelectContent>
                   <SelectItem value="Unassigned">Unassigned</SelectItem>
                   {currentTeam?.members?.map((member) => (
-                    <SelectItem key={member.id} value={member.user.username}>
+                    <SelectItem key={member.id} value={member.user.id}>
                       {member.user.username} ({member.role})
                     </SelectItem>
                   ))}

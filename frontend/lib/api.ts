@@ -53,15 +53,23 @@ class ApiClient {
 
     try {
       const response = await fetch(url, config);
-      const data = await response.json();
+
+      if (response.status === 204) {
+        return { data: undefined };
+      }
+
+      const text = await response.text();
+      const parsed = text ? (JSON.parse(text) as T) : undefined;
 
       if (!response.ok) {
         return {
-          error: data.message || `HTTP error! status: ${response.status}`,
+          error:
+            (parsed as { message?: string })?.message ??
+            `HTTP error! status: ${response.status}`,
         };
       }
 
-      return { data };
+      return { data: parsed };
     } catch (error) {
       return {
         error:
@@ -153,7 +161,7 @@ class ApiClient {
     });
   }
 
-  async updateTask(teamId: string, taskId: string, updates: Partial<Task>) {
+  async updateTask(teamId: string, taskId: string, updates: UpdateTaskData) {
     return this.request<Task>(`/teams/${teamId}/tasks/${taskId}`, {
       method: "PATCH",
       body: JSON.stringify(updates),
@@ -205,7 +213,7 @@ export interface Task {
   status: "To Do" | "In Progress" | "Done";
   teamId: string;
   createdBy: User | null;
-  assignedToId?: User | null;
+  assignedTo?: User | null;
   createdAt: string;
   updatedAt: string;
   creator: User;
@@ -215,4 +223,11 @@ export interface CreateTaskData {
   title: string;
   description: string;
   assignedToId?: string;
+}
+
+export interface UpdateTaskData {
+  title?: string;
+  description?: string;
+  status?: "To Do" | "In Progress" | "Done";
+  assignedToId?: string | null;
 }

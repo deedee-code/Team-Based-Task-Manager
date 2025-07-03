@@ -34,7 +34,7 @@ export function TaskCard({ task }: TaskCardProps) {
   const canEdit =
     isAdmin ||
     task.createdBy?.id === user?.id ||
-    task.assignedToId?.id === user?.id;
+    task.assignedTo?.id === user?.id;
   const canDelete = isAdmin || task.createdBy?.id === user?.id;
 
   const handleDelete = async () => {
@@ -129,10 +129,8 @@ export function TaskCard({ task }: TaskCardProps) {
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <User className="w-3 h-3" />
               <span>
-                {task.assignedToId
-                  ? `Assigned to ${
-                      task.assignedToId?.username || "Unknown user"
-                    }`
+                {task.assignedTo
+                  ? `Assigned to ${task.assignedTo?.username || "Unknown user"}`
                   : "Unassigned"}
               </span>
             </div>
