@@ -179,8 +179,8 @@ export default function Dashboard() {
                           {task.title}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {task.assignedToId
-                            ? `Assigned to ${task.assignedToId}`
+                          {task.assignedTo
+                            ? `Assigned to ${task.assignedTo.username}`
                             : "Unassigned"}
                         </p>
                       </div>
